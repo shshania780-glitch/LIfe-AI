@@ -1,17 +1,17 @@
 from django import forms
-from django.contrib.auth.models import User
+from .models import Lifestyle
 
-class LoginForm(forms.Form):
-    username = forms.CharField(
-        max_length=150,
-        widget=forms.TextInput(attrs={
-            'placeholder': 'Enter your username',
-            'class': 'form-control'
-        })
-    )
-    password = forms.CharField(
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Enter your password',
-            'class': 'form-control'
-        })
-    )
+class LifestyleForm(forms.ModelForm):
+    class Meta:
+        model = Lifestyle
+        fields = [
+            'address',
+            'sleep_hours',
+            'exercise_hours',
+            'diet_quality'
+        ]
+        widgets = {
+            'address': forms.TextInput(attrs={'placeholder': 'Enter your address'}),
+            'sleep_hours': forms.NumberInput(attrs={'placeholder': 'Hours', 'step': '0.1'}),
+            'exercise_hours': forms.NumberInput(attrs={'placeholder': 'Hours', 'step': '0.1'}),
+        }

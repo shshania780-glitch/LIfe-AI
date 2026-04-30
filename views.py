@@ -1,75 +1,74 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_http_methods
-from .forms import LoginForm
+from django.http import JsonResponse
+import sys
+import os
 
-@require_http_methods(["GET", "POST"])
-def register(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        password_confirm = request.POST.get('password_confirm')
-        
-        if password != password_confirm:
-            return render(request, 'registration/register.html', {'error': 'Passwords do not match'})
-        
-        if User.objects.filter(username=username).exists():
-            return render(request, 'registration/register.html', {'error': 'Username already exists'})
-        
-        user = User.objects.create_user(username=username, email=email, password=password)
-        login(request, user)
-        return redirect('form')
+# Add parent directory to path to import app.py
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+from app import predict_lifestyle_score
+
+from .forms import LifestyleForm
+from .models import Lifestyle
+
+@login_required(login_url='login')
+def lifestyle_form(request):
+    prediction_result = None
+    submitted_data = None
     
-    return render(request, 'registration/register.html')
-
-@require_http_methods(["GET", "POST"])
-def user_login(request):
     if request.method == 'POST':
-        form = LoginForm(request.POST)
+        form = LifestyleForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+            obj = form.save(commit=False)
+            obj.user = request.user
             
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('form')
-            else:
-                form.add_error(None, 'Invalid credentials')
-                return render(request, 'registration/login.html', {'form': form})
-        else:
-            return render(request, 'registration/login.html', {'form': form})
+            # Calculate prediction score
+            try:
+                score = predict_lifestyle_score(
+                    sleep_hours=obj.sleep_hours,
+                    exercise_hours=obj.exercise_hours,
+                    diet_quality=obj.diet_quality
+                )
+                obj.lifestyle_score = score
+                prediction_result = {
+                    'score': score,
+                    'sleep_hours': obj.sleep_hours,
+                    'exercise_hours': obj.exercise_hours,
+                    'diet_quality': obj.get_diet_quality_display(),
+                    'address': obj.address
+                }
+                submitted_data = obj
+            except Exception as e:
+                print(f"Prediction error: {e}")
+                obj.lifestyle_score = 0
+            
+            obj.save()
+            # Don't redirect - show result on same page
+            # return redirect('profile')
     else:
-        form = LoginForm()
-    
-    return render(request, 'registration/login.html', {'form': form})
+        form = LifestyleForm()
 
-@login_required
-def user_logout(request):
-    logout(request)
-    return redirect('login')
-
-@login_required
-def profile(request):
-    from predictions.models import Lifestyle
-    from django.db.models import Avg
-    
-    lifestyle_data = Lifestyle.objects.filter(user=request.user).order_by('-created_at')
-    
-    # Calculate averages
-    stats = lifestyle_data.aggregate(
-        avg_sleep=Avg('sleep_hours'),
-        avg_exercise=Avg('exercise_hours')
-    )
-    
-    latest_sleep = round(stats['avg_sleep'], 1) if stats['avg_sleep'] else None
-    latest_exercise = round(stats['avg_exercise'], 1) if stats['avg_exercise'] else None
-    
-    return render(request, 'registration/profile.html', {
-        'lifestyle_data': lifestyle_data,
-        'latest_sleep': latest_sleep,
-        'latest_exercise': latest_exercise
+    return render(request, 'lifestyle_form.html', {
+        'form': form,
+        'prediction_result': prediction_result,
+        'submitted_data': submitted_data
     })
+
+@login_required(login_url='login')
+def prediction_result(request, id):
+    """Display prediction result for a lifestyle entry"""
+    lifestyle = get_object_or_404(Lifestyle, id=id, user=request.user)
+    
+    return render(request, 'prediction_result.html', {
+        'lifestyle': lifestyle,
+        'score': lifestyle.lifestyle_score
+    })
+
+@login_required(login_url='login')
+def delete_lifestyle(request, id):
+    """Delete a lifestyle entry"""
+    lifestyle = get_object_or_404(Lifestyle, id=id, user=request.user)
+    if request.method == 'POST':
+        lifestyle.delete()
+        return redirect('profile')
+    return redirect('profile')
