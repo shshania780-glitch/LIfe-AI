@@ -1,0 +1,351 @@
+import streamlit as st
+import pandas as pd
+
+from datetime import datetime
+import requests
+import json
+
+# Page configuration
+st.set_page_config(
+    page_title="Life AI Dashboard",
+    page_icon="🎯",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Custom CSS for modern look
+st.markdown("""
+<style>
+    :root {
+        --primary-color: #10B981;
+        --secondary-color: #059669;
+        --accent-color: #F59E0B;
+        --danger-color: #DC2626;
+    }
+    
+    .main {
+        background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
+    }
+    
+    .stMetric {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        border-top: 4px solid var(--primary-color);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    .header-card {
+        background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        margin-bottom: 30px;
+    }
+    
+    .score-card {
+        background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+    }
+    
+    .score-value {
+        font-size: 3em;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+    
+    h1, h2, h3 {
+        color: #1F2937;
+        font-weight: 700;
+    }
+    
+    .stButton > button {
+        background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        color: white;
+        border: none;
+        padding: 10px 30px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+        width: 100%;
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# Sidebar
+st.sidebar.title("🎯 Life AI Dashboard")
+
+# Sample data for demo (replace with API calls to Django backend)
+sample_data = {
+    'username': 'John Doe',
+    'email': 'john@example.com',
+    'total_entries': 12,
+    'latest_score': 87,
+    'avg_sleep': 7.5,
+    'avg_exercise': 3.2,
+    'entries': [
+        {
+            'date': '2026-04-29',
+            'sleep_hours': 8.3,
+            'exercise_hours': 3.7,
+            'diet_quality': 'Excellent',
+            'lifestyle_score': 100,
+            'address': 'New York, NY'
+        },
+        {
+            'date': '2026-04-28',
+            'sleep_hours': 6.9,
+            'exercise_hours': 1.5,
+            'diet_quality': 'Good',
+            'lifestyle_score': 70,
+            'address': 'New York, NY'
+        },
+        {
+            'date': '2026-04-27',
+            'sleep_hours': 7.4,
+            'exercise_hours': 3.6,
+            'diet_quality': 'Excellent',
+            'lifestyle_score': 100,
+            'address': 'New York, NY'
+        },
+    ]
+}
+
+# Main header
+st.markdown("""
+<div class="header-card">
+    <h1>🎯 Welcome to Life AI Dashboard</h1>
+    <p style="font-size: 18px; opacity: 0.95; margin-top: 10px;">Track your lifestyle and get AI-powered insights</p>
+</div>
+""", unsafe_allow_html=True)
+
+# Navigation
+page = st.sidebar.radio(
+    "Navigation",
+    ["📊 Dashboard", "📈 Analytics", "⚙️ Settings", "ℹ️ About"],
+    label_visibility="collapsed"
+)
+
+if page == "📊 Dashboard":
+    st.header("📊 Dashboard")
+    
+    # Top metrics
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.metric("📝 Total Entries", sample_data['total_entries'], delta="+2 this week")
+    
+    with col2:
+        st.metric("🎯 Latest Score", f"{sample_data['latest_score']}/100", delta="+5 from avg")
+    
+    with col3:
+        st.metric("😴 Avg Sleep", f"{sample_data['avg_sleep']}h", delta="+0.5h")
+    
+    with col4:
+        st.metric("🏃 Avg Exercise", f"{sample_data['avg_exercise']}h", delta="+0.2h")
+    
+    st.divider()
+    
+    # Latest Score Display
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        st.subheader("Latest Lifestyle Assessment")
+        latest = sample_data['entries'][0]
+        
+        col_a, col_b, col_c, col_d = st.columns(4)
+        with col_a:
+            st.info(f"**Sleep**\n{latest['sleep_hours']}h")
+        with col_b:
+            st.info(f"**Exercise**\n{latest['exercise_hours']}h")
+        with col_c:
+            st.info(f"**Diet**\n{latest['diet_quality']}")
+        with col_d:
+            st.info(f"**Location**\n{latest['address']}")
+    
+    with col2:
+        st.markdown(f"""
+        <div class="score-card">
+            <p>Score</p>
+            <div class="score-value">{latest['lifestyle_score']}</div>
+            <p>Out of 100</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.divider()
+    
+    # Recent history table
+    st.subheader("📋 Recent History")
+    
+    df = pd.DataFrame(sample_data['entries'])
+    df_display = df[['date', 'sleep_hours', 'exercise_hours', 'diet_quality', 'lifestyle_score']].copy()
+    df_display.columns = ['Date', 'Sleep (h)', 'Exercise (h)', 'Diet Quality', 'Score']
+    
+    st.dataframe(df_display, use_container_width=True, hide_index=True)
+
+elif page == "📈 Analytics":
+    st.header("📈 Analytics & Insights")
+    
+    # Charts
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.subheader("Sleep Hours Trend")
+        
+        df = pd.DataFrame(sample_data['entries'])
+        sleep_data = df[['date', 'sleep_hours']].copy()
+        sleep_data['date'] = pd.to_datetime(sleep_data['date'])
+        
+        fig = px.line(
+            sleep_data,
+            x='date',
+            y='sleep_hours',
+            markers=True,
+            title="Sleep Pattern",
+            labels={'sleep_hours': 'Hours', 'date': 'Date'},
+            color_discrete_sequence=['#10B981']
+        )
+        fig.update_layout(height=400, hovermode='x unified')
+        st.plotly_chart(fig, use_container_width=True)
+    
+    with col2:
+        st.subheader("Exercise Hours Trend")
+        
+        exercise_data = df[['date', 'exercise_hours']].copy()
+        exercise_data['date'] = pd.to_datetime(exercise_data['date'])
+        
+        fig = px.bar(
+            exercise_data,
+            x='date',
+            y='exercise_hours',
+            title="Exercise Activity",
+            labels={'exercise_hours': 'Hours', 'date': 'Date'},
+            color_discrete_sequence=['#0D9488']
+        )
+        fig.update_layout(height=400)
+        st.plotly_chart(fig, use_container_width=True)
+    
+    col3, col4 = st.columns(2)
+    
+    with col3:
+        st.subheader("Lifestyle Score Distribution")
+        
+        fig = go.Figure(data=[
+            go.Scatter(
+                x=pd.to_datetime(df['date']),
+                y=df['lifestyle_score'],
+                mode='lines+markers',
+                name='Score',
+                line=dict(color='#F59E0B', width=3),
+                fill='tozeroy',
+                fillcolor='rgba(245, 158, 11, 0.3)',
+                marker=dict(size=8)
+            )
+        ])
+        fig.update_layout(
+            title="Lifestyle Score Over Time",
+            xaxis_title="Date",
+            yaxis_title="Score",
+            height=400,
+            hovermode='x unified'
+        )
+        st.plotly_chart(fig, use_container_width=True)
+    
+    with col4:
+        st.subheader("Diet Quality Distribution")
+        
+        diet_counts = df['diet_quality'].value_counts()
+        colors = ['#10B981', '#0D9488', '#059669', '#F59E0B']
+        
+        fig = px.pie(
+            values=diet_counts.values,
+            names=diet_counts.index,
+            title="Diet Quality Breakdown",
+            color_discrete_sequence=colors
+        )
+        fig.update_layout(height=400)
+        st.plotly_chart(fig, use_container_width=True)
+
+elif page == "⚙️ Settings":
+    st.header("⚙️ Settings")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.subheader("👤 Profile Information")
+        st.text_input("Username", value=sample_data['username'], disabled=True)
+        st.text_input("Email", value=sample_data['email'], disabled=True)
+    
+    with col2:
+        st.subheader("🔐 Security")
+        if st.button("🔐 Change Password"):
+            st.info("Redirecting to password change page...")
+        if st.button("🚪 Logout"):
+            st.warning("Logged out successfully!")
+    
+    st.divider()
+    
+    st.subheader("📱 Preferences")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        theme = st.selectbox("Theme", ["Light", "Dark", "Auto"])
+        notifications = st.checkbox("Enable Notifications", value=True)
+    
+    with col2:
+        frequency = st.selectbox("Report Frequency", ["Daily", "Weekly", "Monthly"])
+        data_sharing = st.checkbox("Allow data sharing for analytics", value=False)
+    
+    if st.button("💾 Save Preferences"):
+        st.success("Preferences saved successfully!")
+
+else:  # About page
+    st.header("ℹ️ About Life AI")
+    
+    st.markdown("""
+    ### Welcome to Life AI Dashboard
+    
+    Life AI is an intelligent lifestyle tracking and prediction system that helps you understand and improve your daily habits.
+    
+    #### 🎯 Features
+    - **Smart Tracking**: Monitor your sleep, exercise, and diet
+    - **AI Predictions**: Get personalized lifestyle scores
+    - **Analytics**: Visualize your progress over time
+    - **Insights**: Understand patterns in your lifestyle
+    
+    #### 📊 How It Works
+    1. Track your daily activities
+    2. AI analyzes your data
+    3. Get personalized recommendations
+    4. Monitor your progress
+    
+    #### 🚀 Getting Started
+    - Visit the Dashboard page to view your latest data
+    - Check Analytics for detailed insights
+    - Configure your preferences in Settings
+    
+    ---
+    
+    **Version**: 1.0.0  
+    **Last Updated**: April 2026
+    """)
+
+# Footer
+st.divider()
+st.markdown("""
+<div style="text-align: center; padding: 20px; color: #6B7280; font-size: 12px;">
+    <p>🎯 Life AI Dashboard | Your Personal Lifestyle Companion</p>
+    <p>© 2026 Life AI. All rights reserved.</p>
+</div>
+""", unsafe_allow_html=True)
