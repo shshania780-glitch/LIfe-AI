@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life AI - Lifestyle Form</title>
+    <link rel="stylesheet" href="/static/theme.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif; 
+            background: linear-gradient(135deg, #071E3D 0%, #0F3D5E 55%, #081D2E 100%);
+            color: #E2E8F0;
+            min-height: 100vh; 
+            padding: 40px 20px 40px 20px;
+            line-height: 1.6;
+        }
+        .container { 
+            max-width: 750px; 
+            margin: 0 auto; 
+            background: rgba(15, 23, 42, 0.92); 
+            padding: 50px 45px; 
+            border-radius: 22px; 
+            box-shadow: 0 35px 80px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(148, 163, 184, 0.12);
+            backdrop-filter: blur(14px);
+        }
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            margin-bottom: 40px; 
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+        }
+        .header-left h1 { 
+            color: #F8FAFC; 
+            font-size: 34px; 
+            font-weight: 800;
+        }
+        .header-left p {
+            color: #CBD5E1;
+            font-size: 15px;
+            margin-top: 8px;
+        }
+        .user-info { text-align: right; }
+        .user-info p { color: #94A3B8; margin: 8px 0; font-size: 14px; }
+        .user-info strong { color: #F8FAFC; }
+        .user-info a { 
+            color: #38BDF8; 
+            text-decoration: none; 
+            font-weight: 600; 
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        .user-info a:hover { 
+            color: #7DD3FC; 
+            transform: translateX(2px);
+        }
+        .form-section {
+            margin-bottom: 35px;
+        }
+        .form-section h3 {
+            color: #E2E8F0;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .form-section h3::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: #38BDF8;
+            border-radius: 2px;
+        }
+        .form-group { 
+            margin-bottom: 22px; 
+        }
+        label { 
+            display: block; 
+            margin-bottom: 10px; 
+            color: #E2E8F0; 
+            font-weight: 700; 
+            font-size: 14px;
+        }
+        label .helper {
+            font-size: 12px;
+            color: #94A3B8;
+            font-weight: 400;
+        }
+        .helper-text {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #94A3B8;
+            line-height: 1.6;
+        }
+        input, select, textarea { 
+            width: 100%; 
+            padding: 14px 18px; 
+            border: 1px solid rgba(148, 163, 184, 0.32); 
+            border-radius: 14px; 
+            font-size: 15px; 
+            transition: all 0.3s ease; 
+            background: #0F172A; 
+            color: #E2E8F0;
+            font-family: inherit;
+            font-weight: 500;        }
+        input:hover, select:hover, textarea:hover {
+            border-color: #38BDF8;
+        }
+        input:focus, select:focus, textarea:focus { 
+            outline: none; 
+            border-color: #38BDF8; 
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+            background: #111827;
+        }
+        select { cursor: pointer; }
+        textarea { resize: vertical; min-height: 120px; }
+        button { 
+            width: 100%; 
+            padding: 16px 24px; 
+            background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%); 
+            color: #F8FAFC; 
+            border: none; 
+            border-radius: 14px; 
+            font-size: 16px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 40px rgba(34, 197, 94, 0.26);
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
+        }
+        button:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 24px 44px rgba(34, 197, 94, 0.32);
+        }
+        button:active { transform: translateY(0); }
+        .guest-notice { 
+            background: rgba(56, 189, 248, 0.12);
+            border-left: 4px solid #38BDF8;
+            padding: 18px 22px; 
+            border-radius: 12px; 
+            margin-bottom: 28px; 
+            color: #E0F2FE;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .guest-notice a { 
+            color: #7DD3FC; 
+            text-decoration: none; 
+            font-weight: 700;
+        }
+        .success-message { 
+            background: rgba(16, 185, 129, 0.14);
+            border-left: 4px solid #22C55E;
+            padding: 18px 22px; 
+            border-radius: 12px; 
+            margin-bottom: 28px; 
+            color: #D1FAE5; 
+            font-size: 14px;
+        }
+        h2 { 
+            color: #F8FAFC; 
+            margin-bottom: 28px; 
+            font-size: 22px; 
+            font-weight: 700;
+        }
+        h1 {
+            font-weight: 700;
+            color: #F8FAFC;
+        }
+        .error-message {
+            background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+            border-left: 4px solid #DC2626;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 28px;
+            color: #7F1D1D;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .prediction-result {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(15, 23, 42, 0.95);
+            border-radius: 18px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+        .prediction-result h3 {
+            color: #F8FAFC;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .result-card {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .score-display {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #0891B2 0%, #0E7490 100%);
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(8, 145, 178, 0.3);
+        }
+        .score-number {
+            font-size: 48px;
+            font-weight: 900;
+            color: #F8FAFC;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            margin-bottom: 8px;
+        }
+        .score-label {
+            font-size: 16px;
+            color: #E0F2FE;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 18px;
+        }
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.15);
+        }
+        .detail-label {
+            color: #CBD5E1;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .detail-value {
+            color: #F8FAFC;
+            font-weight: 700;
+            font-size: 15px;
+        }
+        .result-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-secondary, .btn-primary {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #64748B 0%, #475569 100%);
+            color: #F8FAFC;
+            box-shadow: 0 12px 30px rgba(100, 116, 139, 0.25);
+        }
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 35px rgba(100, 116, 139, 0.35);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+            color: #F8FAFC;
+            box-shadow: 0 12px 30px rgba(34, 197, 94, 0.25);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 35px rgba(34, 197, 94, 0.35);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <h1>🧬 Life AI</h1>
+                <p>Track your lifestyle insights</p>
+            </div>
+            <div class="user-info">
+                {% if user.is_authenticated %}
+                    <p>Welcome, <strong>{{ user.username }}</strong> 👋</p>
+                    <a href="{% url 'profile' %}">View Profile</a> | <a href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                    <p><a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">Register</a></p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if not user.is_authenticated %}
+            <div class="guest-notice">
+                ✨ Please <a href="{% url 'login' %}">log in</a> or <a href="{% url 'register' %}">register</a> to save your lifestyle data and get personalized recommendations.
+            </div>
+        {% endif %}
+
+        <h2>📋 Track Your Lifestyle</h2>
+
+        {% if prediction_result %}
+            <div class="prediction-result">
+                <h3>🎯 Your Lifestyle Prediction</h3>
+                <div class="result-card">
+                    <div class="score-display">
+                        <div class="score-number">{{ prediction_result.score }}/100</div>
+                        <div class="score-label">Lifestyle Score</div>
+                    </div>
+                    <div class="result-details">
+                        <div class="detail-item">
+                            <span class="detail-label">📍 Location:</span>
+                            <span class="detail-value">{{ prediction_result.address|default:"Not specified" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">😴 Sleep Hours:</span>
+                            <span class="detail-value">{{ prediction_result.sleep_hours }} hrs</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">🏃 Exercise Hours:</span>
+                            <span class="detail-value">{{ prediction_result.exercise_hours }} hrs</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">🥗 Diet Quality:</span>
+                            <span class="detail-value">{{ prediction_result.diet_quality }}</span>
+                        </div>
+                    </div>
+                    <div class="result-actions">
+                        <a href="{% url 'profile' %}" class="btn-secondary">📊 View All Results</a>
+                        <a href="{% url 'form' %}" class="btn-primary">➕ New Assessment</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="form-section">
+                <h3>Location</h3>
+                {{ form.address }}
+                <p class="helper-text">Enter your location or address so we can personalize your lifestyle record.</p>
+            </div>
+
+            <div class="form-section">
+                <h3>Sleep Hours</h3>
+                {{ form.sleep_hours }}
+                <p class="helper-text">Enter how many hours you sleep on average per day (e.g. 7.5).</p>
+            </div>
+
+            <div class="form-section">
+                <h3>Exercise Hours</h3>
+                {{ form.exercise_hours }}
+                <p class="helper-text">Enter your daily exercise time in hours (e.g. 1.0, 2.5).</p>
+            </div>
+
+            <div class="form-section">
+                <h3>Diet Quality</h3>
+                {{ form.diet_quality }}
+                <p class="helper-text">Choose your nutrition quality: Poor, Fair, Good, or Excellent.</p>
+            </div>
+
+            <button type="submit">
+                {% if user.is_authenticated %}✅ Submit Assessment{% else %}👁️ Preview Results{% endif %}
+            </button>
+        </form>
+    </div>
+</body>
+</html>
