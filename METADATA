@@ -1,247 +1,199 @@
 Metadata-Version: 2.4
-Name: asgiref
-Version: 3.11.1
-Summary: ASGI specs, helper code, and adapters
-Home-page: https://github.com/django/asgiref/
-Author: Django Software Foundation
-Author-email: foundation@djangoproject.com
-License: BSD-3-Clause
-Project-URL: Documentation, https://asgi.readthedocs.io/
-Project-URL: Further Documentation, https://docs.djangoproject.com/en/stable/topics/async/#async-adapter-functions
-Project-URL: Changelog, https://github.com/django/asgiref/blob/master/CHANGELOG.txt
+Name: attrs
+Version: 26.1.0
+Summary: Classes Without Boilerplate
+Project-URL: Documentation, https://www.attrs.org/
+Project-URL: Changelog, https://www.attrs.org/en/stable/changelog.html
+Project-URL: GitHub, https://github.com/python-attrs/attrs
+Project-URL: Funding, https://github.com/sponsors/hynek
+Project-URL: Tidelift, https://tidelift.com/subscription/pkg/pypi-attrs?utm_source=pypi-attrs&utm_medium=pypi
+Author-email: Hynek Schlawack <hs@ox.cx>
+License-Expression: MIT
+License-File: LICENSE
+Keywords: attribute,boilerplate,class
 Classifier: Development Status :: 5 - Production/Stable
-Classifier: Environment :: Web Environment
-Classifier: Intended Audience :: Developers
-Classifier: License :: OSI Approved :: BSD License
-Classifier: Operating System :: OS Independent
-Classifier: Programming Language :: Python
-Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3 :: Only
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
-Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Classifier: Typing :: Typed
 Requires-Python: >=3.9
-License-File: LICENSE
-Requires-Dist: typing_extensions>=4; python_version < "3.11"
-Provides-Extra: tests
-Requires-Dist: pytest; extra == "tests"
-Requires-Dist: pytest-asyncio; extra == "tests"
-Requires-Dist: mypy>=1.14.0; extra == "tests"
-Dynamic: license-file
+Description-Content-Type: text/markdown
 
-asgiref
-=======
+<p align="center">
+  <a href="https://www.attrs.org/">
+    <img src="https://raw.githubusercontent.com/python-attrs/attrs/main/docs/_static/attrs_logo.svg" width="35%" alt="attrs" />
+  </a>
+</p>
 
-.. image:: https://github.com/django/asgiref/actions/workflows/tests.yml/badge.svg
-    :target: https://github.com/django/asgiref/actions/workflows/tests.yml
 
-.. image:: https://img.shields.io/pypi/v/asgiref.svg
-    :target: https://pypi.python.org/pypi/asgiref
+*attrs* is the Python package that will bring back the **joy** of **writing classes** by relieving you from the drudgery of implementing object protocols (aka [dunder methods](https://www.attrs.org/en/latest/glossary.html#term-dunder-methods)).
+Trusted by NASA for [Mars missions since 2020](https://github.com/readme/featured/nasa-ingenuity-helicopter)!
 
-ASGI is a standard for Python asynchronous web apps and servers to communicate
-with each other, and positioned as an asynchronous successor to WSGI. You can
-read more at https://asgi.readthedocs.io/en/latest/
+Its main goal is to help you to write **concise** and **correct** software without slowing down your code.
 
-This package includes ASGI base libraries, such as:
 
-* Sync-to-async and async-to-sync function wrappers, ``asgiref.sync``
-* Server base classes, ``asgiref.server``
-* A WSGI-to-ASGI adapter, in ``asgiref.wsgi``
+## Sponsors
 
+*attrs* would not be possible without our [amazing sponsors](https://github.com/sponsors/hynek).
+Especially those generously supporting us at the *The Organization* tier and higher:
 
-Function wrappers
------------------
+<!-- sponsor-break-begin -->
 
-These allow you to wrap or decorate async or sync functions to call them from
-the other style (so you can call async functions from a synchronous thread,
-or vice-versa).
+<p align="center">
 
-In particular:
+<!-- [[[cog
+import pathlib, tomllib
 
-* AsyncToSync lets a synchronous subthread stop and wait while the async
-  function is called on the main thread's event loop, and then control is
-  returned to the thread when the async function is finished.
+for sponsor in tomllib.loads(pathlib.Path("pyproject.toml").read_text())["tool"]["sponcon"]["sponsors"]:
+      print(f'<a href="{sponsor["url"]}"><img title="{sponsor["title"]}" src="https://www.attrs.org/en/26.1.0/_static/sponsors/{sponsor["img"]}" width="190" /></a>')
+]]] -->
+<a href="https://www.variomedia.de/"><img title="Variomedia AG" src="https://www.attrs.org/en/26.1.0/_static/sponsors/Variomedia.svg" width="190" /></a>
+<a href="https://tidelift.com/?utm_source=lifter&utm_medium=referral&utm_campaign=hynek"><img title="Tidelift" src="https://www.attrs.org/en/26.1.0/_static/sponsors/Tidelift.svg" width="190" /></a>
+<a href="https://kraken.tech/"><img title="Kraken Tech" src="https://www.attrs.org/en/26.1.0/_static/sponsors/Kraken.svg" width="190" /></a>
+<a href="https://privacy-solutions.org/"><img title="Privacy Solutions" src="https://www.attrs.org/en/26.1.0/_static/sponsors/Privacy-Solutions.svg" width="190" /></a>
+<a href="https://filepreviews.io/"><img title="FilePreviews" src="https://www.attrs.org/en/26.1.0/_static/sponsors/FilePreviews.svg" width="190" /></a>
+<a href="https://www.testmuai.com/?utm_medium=sponsor&utm_source=structlog"><img title="TestMu AI" src="https://www.attrs.org/en/26.1.0/_static/sponsors/TestMu-AI.svg" width="190" /></a>
+<a href="https://polar.sh/"><img title="Polar" src="https://www.attrs.org/en/26.1.0/_static/sponsors/Polar.svg" width="190" /></a>
+<!-- [[[end]]] -->
 
-* SyncToAsync lets async code call a synchronous function, which is run in
-  a threadpool and control returned to the async coroutine when the synchronous
-  function completes.
+</p>
 
-The idea is to make it easier to call synchronous APIs from async code and
-asynchronous APIs from synchronous code so it's easier to transition code from
-one style to the other. In the case of Channels, we wrap the (synchronous)
-Django view system with SyncToAsync to allow it to run inside the (asynchronous)
-ASGI server.
+<!-- sponsor-break-end -->
 
-Note that exactly what threads things run in is very specific, and aimed to
-keep maximum compatibility with old synchronous code. See
-"Synchronous code & Threads" below for a full explanation. By default,
-``sync_to_async`` will run all synchronous code in the program in the same
-thread for safety reasons; you can disable this for more performance with
-``@sync_to_async(thread_sensitive=False)``, but make sure that your code does
-not rely on anything bound to threads (like database connections) when you do.
+<p align="center">
+   <strong>Please consider <a href="https://github.com/sponsors/hynek">joining them</a> to help make <em>attrs</em>’s maintenance more sustainable!</strong>
+</p>
 
+<!-- teaser-end -->
 
-Threadlocal replacement
------------------------
+## Example
 
-This is a drop-in replacement for ``threading.local`` that works with both
-threads and asyncio Tasks. Even better, it will proxy values through from a
-task-local context to a thread-local context when you use ``sync_to_async``
-to run things in a threadpool, and vice-versa for ``async_to_sync``.
+*attrs* gives you a class decorator and a way to declaratively define the attributes on that class:
 
-If you instead want true thread- and task-safety, you can set
-``thread_critical`` on the Local object to ensure this instead.
+<!-- code-begin -->
 
+```pycon
+>>> from attrs import asdict, define, make_class, Factory
 
-Server base classes
--------------------
+>>> @define
+... class SomeClass:
+...     a_number: int = 42
+...     list_of_numbers: list[int] = Factory(list)
+...
+...     def hard_math(self, another_number):
+...         return self.a_number + sum(self.list_of_numbers) * another_number
 
-Includes a ``StatelessServer`` class which provides all the hard work of
-writing a stateless server (as in, does not handle direct incoming sockets
-but instead consumes external streams or sockets to work out what is happening).
 
-An example of such a server would be a chatbot server that connects out to
-a central chat server and provides a "connection scope" per user chatting to
-it. There's only one actual connection, but the server has to separate things
-into several scopes for easier writing of the code.
+>>> sc = SomeClass(1, [1, 2, 3])
+>>> sc
+SomeClass(a_number=1, list_of_numbers=[1, 2, 3])
 
-You can see an example of this being used in `frequensgi <https://github.com/andrewgodwin/frequensgi>`_.
+>>> sc.hard_math(3)
+19
+>>> sc == SomeClass(1, [1, 2, 3])
+True
+>>> sc != SomeClass(2, [3, 2, 1])
+True
 
+>>> asdict(sc)
+{'a_number': 1, 'list_of_numbers': [1, 2, 3]}
 
-WSGI-to-ASGI adapter
---------------------
+>>> SomeClass()
+SomeClass(a_number=42, list_of_numbers=[])
 
-Allows you to wrap a WSGI application so it appears as a valid ASGI application.
+>>> C = make_class("C", ["a", "b"])
+>>> C("foo", "bar")
+C(a='foo', b='bar')
+```
 
-Simply wrap it around your WSGI application like so::
+After *declaring* your attributes, *attrs* gives you:
 
-    asgi_application = WsgiToAsgi(wsgi_application)
+- a concise and explicit overview of the class's attributes,
+- a nice human-readable `__repr__`,
+- equality-checking methods,
+- an initializer,
+- and much more,
 
-The WSGI application will be run in a synchronous threadpool, and the wrapped
-ASGI application will be one that accepts ``http`` class messages.
+*without* writing dull boilerplate code again and again and *without* runtime performance penalties.
 
-Please note that not all extended features of WSGI may be supported (such as
-file handles for incoming POST bodies).
+---
 
+This example uses *attrs*'s modern APIs that have been introduced in version 20.1.0, and the *attrs* package import name that has been added in version 21.3.0.
+The classic APIs (`@attr.s`, `attr.ib`, plus their serious-business aliases) and the `attr` package import name will remain **indefinitely**.
 
-Dependencies
-------------
+Check out [*On The Core API Names*](https://www.attrs.org/en/latest/names.html) for an in-depth explanation!
 
-``asgiref`` requires Python 3.9 or higher.
 
+### Hate Type Annotations!?
 
-Contributing
-------------
+No problem!
+Types are entirely **optional** with *attrs*.
+Simply assign `attrs.field()` to the attributes instead of annotating them with types:
 
-Please refer to the
-`main Channels contributing docs <https://github.com/django/channels/blob/master/CONTRIBUTING.rst>`_.
+```python
+from attrs import define, field
 
+@define
+class SomeClass:
+    a_number = field(default=42)
+    list_of_numbers = field(factory=list)
+```
 
-Testing
-'''''''
 
-To run tests, make sure you have installed the ``tests`` extra with the package::
+## Data Classes
 
-    cd asgiref/
-    pip install -e .[tests]
-    pytest
+On the tin, *attrs* might remind you of `dataclasses` (and indeed, `dataclasses` [are a descendant](https://hynek.me/articles/import-attrs/) of *attrs*).
+In practice it does a lot more and is more flexible.
+For instance, it allows you to define [special handling of NumPy arrays for equality checks](https://www.attrs.org/en/stable/comparison.html#customization), allows more ways to [plug into the initialization process](https://www.attrs.org/en/stable/init.html#hooking-yourself-into-initialization), has a replacement for `__init_subclass__`, and allows for stepping through the generated methods using a debugger.
 
+For more details, please refer to our [comparison page](https://www.attrs.org/en/stable/why.html#data-classes), but generally speaking, we are more likely to commit crimes against nature to make things work that one would expect to work, but that are quite complicated in practice.
 
-Building the documentation
-''''''''''''''''''''''''''
 
-The documentation uses `Sphinx <http://www.sphinx-doc.org>`_::
+## Project Information
 
-    cd asgiref/docs/
-    pip install sphinx
+- [**Changelog**](https://www.attrs.org/en/stable/changelog.html)
+- [**Documentation**](https://www.attrs.org/)
+- [**PyPI**](https://pypi.org/project/attrs/)
+- [**Source Code**](https://github.com/python-attrs/attrs)
+- [**Contributing**](https://github.com/python-attrs/attrs/blob/main/.github/CONTRIBUTING.md)
+- [**Third-party Extensions**](https://github.com/python-attrs/attrs/wiki/Extensions-to-attrs)
+- **Get Help**: use the `python-attrs` tag on [Stack Overflow](https://stackoverflow.com/questions/tagged/python-attrs)
 
-To build the docs, you can use the default tools::
 
-    sphinx-build -b html . _build/html  # or `make html`, if you've got make set up
-    cd _build/html
-    python -m http.server
+### *attrs* for Enterprise
 
-...or you can use ``sphinx-autobuild`` to run a server and rebuild/reload
-your documentation changes automatically::
+Available as part of the [Tidelift Subscription](https://tidelift.com/?utm_source=lifter&utm_medium=referral&utm_campaign=hynek).
 
-    pip install sphinx-autobuild
-    sphinx-autobuild . _build/html
+The maintainers of *attrs* and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source packages you use to build your applications.
+Save time, reduce risk, and improve code health, while paying the maintainers of the exact packages you use.
 
+## Release Information
 
-Releasing
-'''''''''
+### Backwards-incompatible Changes
 
-To release, first add details to CHANGELOG.txt and update the version number in ``asgiref/__init__.py``.
+- Field aliases are now resolved *before* calling `field_transformer`, so transformers receive fully populated `Attribute` objects with usable `alias` values instead of `None`.
+  The new `Attribute.alias_is_default` flag indicates whether the alias was auto-generated (`True`) or explicitly set by the user (`False`).
+  [#1509](https://github.com/python-attrs/attrs/issues/1509)
 
-Then, build and push the packages::
 
-    python -m build
-    twine upload dist/*
-    rm -r asgiref.egg-info dist
+### Changes
 
+- Fix type annotations for `attrs.validators.optional()`, so it no longer rejects tuples with more than one validator.
+  [#1496](https://github.com/python-attrs/attrs/issues/1496)
+- The `attrs.validators.disabled()` contextmanager can now be nested.
+  [#1513](https://github.com/python-attrs/attrs/issues/1513)
+- Frozen classes can set `on_setattr=attrs.setters.NO_OP` in addition to `None`.
+  [#1515](https://github.com/python-attrs/attrs/issues/1515)
+- It's now possible to pass *attrs* **instances** in addition to *attrs* **classes** to `attrs.fields()`.
+  [#1529](https://github.com/python-attrs/attrs/issues/1529)
 
-Implementation Details
-----------------------
 
-Synchronous code & threads
-''''''''''''''''''''''''''
 
-The ``asgiref.sync`` module provides two wrappers that let you go between
-asynchronous and synchronous code at will, while taking care of the rough edges
-for you.
+---
 
-Unfortunately, the rough edges are numerous, and the code has to work especially
-hard to keep things in the same thread as much as possible. Notably, the
-restrictions we are working with are:
-
-* All synchronous code called through ``SyncToAsync`` and marked with
-  ``thread_sensitive`` should run in the same thread as each other (and if the
-  outer layer of the program is synchronous, the main thread)
-
-* If a thread already has a running async loop, ``AsyncToSync`` can't run things
-  on that loop if it's blocked on synchronous code that is above you in the
-  call stack.
-
-The first compromise you get to might be that ``thread_sensitive`` code should
-just run in the same thread and not spawn in a sub-thread, fulfilling the first
-restriction, but that immediately runs you into the second restriction.
-
-The only real solution is to essentially have a variant of ThreadPoolExecutor
-that executes any ``thread_sensitive`` code on the outermost synchronous
-thread - either the main thread, or a single spawned subthread.
-
-This means you now have two basic states:
-
-* If the outermost layer of your program is synchronous, then all async code
-  run through ``AsyncToSync`` will run in a per-call event loop in arbitrary
-  sub-threads, while all ``thread_sensitive`` code will run in the main thread.
-
-* If the outermost layer of your program is asynchronous, then all async code
-  runs on the main thread's event loop, and all ``thread_sensitive`` synchronous
-  code will run in a single shared sub-thread.
-
-Crucially, this means that in both cases there is a thread which is a shared
-resource that all ``thread_sensitive`` code must run on, and there is a chance
-that this thread is currently blocked on its own ``AsyncToSync`` call. Thus,
-``AsyncToSync`` needs to act as an executor for thread code while it's blocking.
-
-The ``CurrentThreadExecutor`` class provides this functionality; rather than
-simply waiting on a Future, you can call its ``run_until_future`` method and
-it will run submitted code until that Future is done. This means that code
-inside the call can then run code on your thread.
-
-
-Maintenance and Security
-------------------------
-
-To report security issues, please contact security@djangoproject.com. For GPG
-signatures and more security process information, see
-https://docs.djangoproject.com/en/dev/internals/security/.
-
-To report bugs or request new features, please open a new GitHub issue.
-
-This repository is part of the Channels project. For the shepherd and maintenance team, please see the
-`main Channels readme <https://github.com/django/channels/blob/master/README.rst>`_.
+[Full changelog →](https://www.attrs.org/en/stable/changelog.html)
