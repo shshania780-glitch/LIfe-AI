@@ -1,151 +1,173 @@
-"""
-A Simple server used to show altair graphics from a prompt or script.
+import asyncio
+import logging
+import time
+import traceback
 
-This is adapted from the mpld3 package; see
-https://github.com/mpld3/mpld3/blob/master/mpld3/_server.py
-"""
+from .compatibility import guarantee_single_callable
 
-import itertools
-import random
-import socket
-import sys
-import threading
-import webbrowser
-from http import server
-from io import BytesIO as IO
-
-JUPYTER_WARNING = """
-Note: if you're in the Jupyter notebook, Chart.serve() is not the best
-      way to view plots. Consider using Chart.display().
-You must interrupt the kernel to cancel this command.
-"""
+logger = logging.getLogger(__name__)
 
 
-# Mock server used for testing
+class StatelessServer:
+    """
+    Base server class that handles basic concepts like application instance
+    creation/pooling, exception handling, and similar, for stateless protocols
+    (i.e. ones without actual incoming connections to the process)
 
+    Your code should override the handle() method, doing whatever it needs to,
+    and calling get_or_create_application_instance with a unique `scope_id`
+    and `scope` for the scope it wants to get.
 
-class MockRequest:
-    def makefile(self, *args, **kwargs):
-        return IO(b"GET /")
+    If an application instance is found with the same `scope_id`, you are
+    given its input queue, otherwise one is made for you with the scope provided
+    and you are given that fresh new input queue. Either way, you should do
+    something like:
 
-    def sendall(self, response):
-        pass
-
-
-class MockServer:
-    def __init__(self, ip_port, Handler):
-        Handler(MockRequest(), ip_port[0], self)
-
-    def serve_forever(self):
-        pass
-
-    def server_close(self):
-        pass
-
-
-def generate_handler(html, files=None):
-    if files is None:
-        files = {}
-
-    class MyHandler(server.BaseHTTPRequestHandler):
-        def do_GET(self):
-            """Respond to a GET request."""
-            if self.path == "/":
-                self.send_response(200)
-                self.send_header("Content-type", "text/html")
-                self.end_headers()
-                self.wfile.write(html.encode())
-            elif self.path in files:
-                content_type, content = files[self.path]
-                self.send_response(200)
-                self.send_header("Content-type", content_type)
-                self.end_headers()
-                self.wfile.write(content.encode())
-            else:
-                self.send_error(404)
-
-    return MyHandler
-
-
-def find_open_port(ip, port, n=50):
-    """Find an open port near the specified port."""
-    ports = itertools.chain(
-        (port + i for i in range(n)), (port + random.randint(-2 * n, 2 * n))
+    input_queue = self.get_or_create_application_instance(
+        "user-123456",
+        {"type": "testprotocol", "user_id": "123456", "username": "andrew"},
     )
+    input_queue.put_nowait(message)
 
-    for port in ports:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        result = s.connect_ex((ip, port))
-        s.close()
-        if result != 0:
-            return port
-    msg = "no open ports found"
-    raise ValueError(msg)
+    If you try and create an application instance and there are already
+    `max_application` instances, the oldest/least recently used one will be
+    reclaimed and shut down to make space.
 
+    Application coroutines that error will be found periodically (every 100ms
+    by default) and have their exceptions printed to the console. Override
+    application_exception() if you want to do more when this happens.
 
-def serve(
-    html,
-    ip="127.0.0.1",
-    port=8888,
-    n_retries=50,
-    files=None,
-    jupyter_warning=True,
-    open_browser=True,
-    http_server=None,
-) -> None:
+    If you override run(), make sure you handle things like launching the
+    application checker.
     """
-    Start a server serving the given HTML, and (optionally) open a browser.
 
-    Parameters
-    ----------
-    html : string
-        HTML to serve
-    ip : string (default = '127.0.0.1')
-        ip address at which the HTML will be served.
-    port : int (default = 8888)
-        the port at which to serve the HTML
-    n_retries : int (default = 50)
-        the number of nearby ports to search if the specified port is in use.
-    files : dictionary (optional)
-        dictionary of extra content to serve
-    jupyter_warning : bool (optional)
-        if True (default), then print a warning if this is used within Jupyter
-    open_browser : bool (optional)
-        if True (default), then open a web browser to the given HTML
-    http_server : class (optional)
-        optionally specify an HTTPServer class to use for showing the
-        figure. The default is Python's basic HTTPServer.
-    """
-    port = find_open_port(ip, port, n_retries)
-    Handler = generate_handler(html, files)
+    application_checker_interval = 0.1
 
-    if http_server is None:
-        srvr = server.HTTPServer((ip, port), Handler)
-    else:
-        srvr = http_server((ip, port), Handler)
+    def __init__(self, application, max_applications=1000):
+        # Parameters
+        self.application = application
+        self.max_applications = max_applications
+        # Initialisation
+        self.application_instances = {}
 
-    if jupyter_warning:
+    ### Mainloop and handling
+
+    def run(self):
+        """
+        Runs the asyncio event loop with our handler loop.
+        """
+        event_loop = asyncio.get_event_loop()
         try:
-            __IPYTHON__  # type: ignore # noqa
-        except NameError:
+            event_loop.run_until_complete(self.arun())
+        except KeyboardInterrupt:
+            logger.info("Exiting due to Ctrl-C/interrupt")
+
+    async def arun(self):
+        """
+        Runs the asyncio event loop with our handler loop.
+        """
+
+        class Done(Exception):
             pass
-        else:
-            print(JUPYTER_WARNING)
 
-    # Start the server
-    print(f"Serving to http://{ip}:{port}/    [Ctrl-C to exit]")
-    sys.stdout.flush()
+        async def handle():
+            await self.handle()
+            raise Done
 
-    if open_browser:
-        # Use a thread to open a web browser pointing to the server
-        def b():
-            return webbrowser.open(f"http://{ip}:{port}")
+        try:
+            await asyncio.gather(self.application_checker(), handle())
+        except Done:
+            pass
 
-        threading.Thread(target=b).start()
+    async def handle(self):
+        raise NotImplementedError("You must implement handle()")
 
-    try:
-        srvr.serve_forever()
-    except (KeyboardInterrupt, SystemExit):
-        print("\nstopping Server...")
+    async def application_send(self, scope, message):
+        """
+        Receives outbound sends from applications and handles them.
+        """
+        raise NotImplementedError("You must implement application_send()")
 
-    srvr.server_close()
+    ### Application instance management
+
+    def get_or_create_application_instance(self, scope_id, scope):
+        """
+        Creates an application instance and returns its queue.
+        """
+        if scope_id in self.application_instances:
+            self.application_instances[scope_id]["last_used"] = time.time()
+            return self.application_instances[scope_id]["input_queue"]
+        # See if we need to delete an old one
+        while len(self.application_instances) > self.max_applications:
+            self.delete_oldest_application_instance()
+        # Make an instance of the application
+        input_queue = asyncio.Queue()
+        application_instance = guarantee_single_callable(self.application)
+        # Run it, and stash the future for later checking
+        future = asyncio.ensure_future(
+            application_instance(
+                scope=scope,
+                receive=input_queue.get,
+                send=lambda message: self.application_send(scope, message),
+            ),
+        )
+        self.application_instances[scope_id] = {
+            "input_queue": input_queue,
+            "future": future,
+            "scope": scope,
+            "last_used": time.time(),
+        }
+        return input_queue
+
+    def delete_oldest_application_instance(self):
+        """
+        Finds and deletes the oldest application instance
+        """
+        oldest_time = min(
+            details["last_used"] for details in self.application_instances.values()
+        )
+        for scope_id, details in self.application_instances.items():
+            if details["last_used"] == oldest_time:
+                self.delete_application_instance(scope_id)
+                # Return to make sure we only delete one in case two have
+                # the same oldest time
+                return
+
+    def delete_application_instance(self, scope_id):
+        """
+        Removes an application instance (makes sure its task is stopped,
+        then removes it from the current set)
+        """
+        details = self.application_instances[scope_id]
+        del self.application_instances[scope_id]
+        if not details["future"].done():
+            details["future"].cancel()
+
+    async def application_checker(self):
+        """
+        Goes through the set of current application instance Futures and cleans up
+        any that are done/prints exceptions for any that errored.
+        """
+        while True:
+            await asyncio.sleep(self.application_checker_interval)
+            for scope_id, details in list(self.application_instances.items()):
+                if details["future"].done():
+                    exception = details["future"].exception()
+                    if exception:
+                        await self.application_exception(exception, details)
+                    try:
+                        del self.application_instances[scope_id]
+                    except KeyError:
+                        # Exception handling might have already got here before us. That's fine.
+                        pass
+
+    async def application_exception(self, exception, application_details):
+        """
+        Called whenever an application coroutine has an exception.
+        """
+        logging.error(
+            "Exception inside application: %s\n%s%s",
+            exception,
+            "".join(traceback.format_tb(exception.__traceback__)),
+            f"  {exception}",
+        )
