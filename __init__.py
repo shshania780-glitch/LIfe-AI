@@ -1,7 +1,5 @@
-# Copyright Jonathan Hartley 2013. BSD 3-Clause license, see LICENSE file.
-from .initialise import init, deinit, reinit, colorama_text, just_fix_windows_console
-from .ansi import Fore, Back, Style, Cursor
-from .ansitowin32 import AnsiToWin32
+from __future__ import annotations
 
-__version__ = '0.4.6'
+from contourpy.util._build_config import build_config
 
+__all__ = ["build_config"]
