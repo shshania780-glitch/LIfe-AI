@@ -176,3 +176,183 @@ html.dark-mode {
 button, a {
     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.2s;
 }
+
+/* Registration page */
+body.registration-page {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    background: radial-gradient(circle at top, rgba(124, 58, 237, 0.3), transparent 25%),
+                radial-gradient(circle at bottom right, rgba(8, 145, 178, 0.25), transparent 22%),
+                var(--bg-gradient-4);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    line-height: 1.6;
+}
+
+body.registration-page .container {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    padding: 44px 38px;
+    border-radius: 24px;
+    box-shadow: 0 28px 80px rgba(15, 23, 42, 0.18);
+    width: min(100%, 520px);
+    max-width: 520px;
+}
+
+body.registration-page .logo {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+body.registration-page .logo-text {
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    background: var(--bg-gradient-4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+body.registration-page h1 {
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 30px;
+    font-weight: 800;
+}
+
+body.registration-page .subtitle {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 34px;
+    font-size: 15px;
+    letter-spacing: 0.2px;
+}
+
+body.registration-page .form-group {
+    margin-bottom: 20px;
+}
+
+body.registration-page label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text-secondary);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+body.registration-page input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    border-radius: 14px;
+    font-size: 15px;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+    background: #ffffff;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-weight: 500;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+body.registration-page input::placeholder {
+    color: rgba(55, 65, 81, 0.6);
+}
+
+body.registration-page input:hover {
+    border-color: var(--primary);
+    transform: translateY(-1px);
+}
+
+body.registration-page input:focus {
+    outline: none;
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 4px rgba(8, 145, 178, 0.12);
+    background: #ffffff;
+}
+
+body.registration-page button {
+    width: 100%;
+    padding: 15px 0;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: var(--text-white);
+    border: none;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 14px 30px rgba(8, 145, 178, 0.24);
+}
+
+body.registration-page button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 36px rgba(8, 145, 178, 0.28);
+}
+
+body.registration-page button:active {
+    transform: translateY(0);
+}
+
+body.registration-page .error {
+    color: var(--error-text);
+    background: var(--error-bg);
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border-left: 4px solid var(--error-border);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+body.registration-page .link {
+    text-align: center;
+    margin-top: 30px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+body.registration-page .link a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 700;
+    transition: color 0.25s ease, transform 0.25s ease;
+}
+
+body.registration-page .link a:hover {
+    color: var(--primary-dark);
+    transform: translateX(2px);
+}
+
+body.registration-page .password-requirements {
+    background: var(--bg-secondary);
+    padding: 14px 16px;
+    border-radius: 12px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    border-left: 4px solid var(--primary);
+}
+
+@media (max-width: 580px) {
+    body.registration-page .container {
+        padding: 32px 24px;
+        border-radius: 20px;
+    }
+
+    body.registration-page h1 {
+        font-size: 26px;
+    }
+
+    body.registration-page .logo-text {
+        font-size: 30px;
+    }
+}
