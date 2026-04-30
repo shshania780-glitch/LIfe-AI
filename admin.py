@@ -1,9 +1,12 @@
 from django.contrib import admin
-from .models import Lifestyle
+from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
 
-@admin.register(Lifestyle)
-class LifestyleAdmin(admin.ModelAdmin):
-    list_display = ('user', 'address', 'sleep_hours', 'exercise_hours', 'diet_quality', 'created_at')
-    list_filter = ('diet_quality', 'created_at')
-    search_fields = ('user__username', 'address')
-    readonly_fields = ('created_at',)
+# UserAdmin is already registered by Django, just customize if needed
+admin.site.unregister(User)
+
+@admin.register(User)
+class CustomUserAdmin(UserAdmin):
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'date_joined')
+    list_filter = ('is_staff', 'is_superuser', 'date_joined')
+    search_fields = ('username', 'email', 'first_name', 'last_name')
