@@ -1,4 +1,8 @@
-from .core import contents, where
+from __future__ import annotations
 
-__all__ = ["contents", "where"]
-__version__ = "2026.04.22"
+from .__main__ import cli_detect, query_yes_no
+
+__all__ = (
+    "cli_detect",
+    "query_yes_no",
+)
