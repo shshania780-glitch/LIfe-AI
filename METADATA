@@ -1,251 +1,247 @@
 Metadata-Version: 2.4
-Name: altair
-Version: 6.0.0
-Summary: Vega-Altair: A declarative statistical visualization library for Python.
-Project-URL: Documentation, https://altair-viz.github.io
-Project-URL: Source, https://github.com/vega/altair
-Author: Vega-Altair Contributors
-License: Copyright (c) 2015-2025, Vega-Altair Developers
-        All rights reserved.
-        
-        Redistribution and use in source and binary forms, with or without
-        modification, are permitted provided that the following conditions are met:
-        
-        * Redistributions of source code must retain the above copyright notice, this
-          list of conditions and the following disclaimer.
-        
-        * Redistributions in binary form must reproduce the above copyright notice,
-          this list of conditions and the following disclaimer in the documentation
-          and/or other materials provided with the distribution.
-        
-        * Neither the name of vega-altair nor the names of its
-          contributors may be used to endorse or promote products derived from
-          this software without specific prior written permission.
-        
-        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-        AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-        DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-        FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-        DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-        SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-        OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-        
-License-File: LICENSE
-Keywords: declarative,interactive,json,statistics,vega-lite,visualization
+Name: asgiref
+Version: 3.11.1
+Summary: ASGI specs, helper code, and adapters
+Home-page: https://github.com/django/asgiref/
+Author: Django Software Foundation
+Author-email: foundation@djangoproject.com
+License: BSD-3-Clause
+Project-URL: Documentation, https://asgi.readthedocs.io/
+Project-URL: Further Documentation, https://docs.djangoproject.com/en/stable/topics/async/#async-adapter-functions
+Project-URL: Changelog, https://github.com/django/asgiref/blob/master/CHANGELOG.txt
 Classifier: Development Status :: 5 - Production/Stable
-Classifier: Environment :: Console
-Classifier: Intended Audience :: Science/Research
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: BSD License
-Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
-Classifier: Programming Language :: Python :: 3.14
-Classifier: Typing :: Typed
+Classifier: Topic :: Internet :: WWW/HTTP
 Requires-Python: >=3.9
-Requires-Dist: jinja2
-Requires-Dist: jsonschema>=3.0
-Requires-Dist: narwhals>=1.27.1
-Requires-Dist: packaging
-Requires-Dist: typing-extensions>=4.12.0; python_version < '3.15'
-Provides-Extra: all
-Requires-Dist: altair-tiles>=0.3.0; extra == 'all'
-Requires-Dist: anywidget>=0.9.0; extra == 'all'
-Requires-Dist: numpy; extra == 'all'
-Requires-Dist: pandas>=1.1.3; extra == 'all'
-Requires-Dist: pyarrow>=11; extra == 'all'
-Requires-Dist: vegafusion>=2.0.3; extra == 'all'
-Requires-Dist: vl-convert-python>=1.8.0; extra == 'all'
-Provides-Extra: dev
-Requires-Dist: duckdb>=1.0; (python_version < '3.14') and extra == 'dev'
-Requires-Dist: geopandas>=0.14.3; (python_version < '3.14') and extra == 'dev'
-Requires-Dist: hatch>=1.13.0; extra == 'dev'
-Requires-Dist: ipykernel; extra == 'dev'
-Requires-Dist: ipython; extra == 'dev'
-Requires-Dist: mistune; extra == 'dev'
-Requires-Dist: mypy; extra == 'dev'
-Requires-Dist: pandas-stubs; extra == 'dev'
-Requires-Dist: pandas>=1.1.3; extra == 'dev'
-Requires-Dist: polars>=0.20.3; extra == 'dev'
-Requires-Dist: pyarrow-stubs; extra == 'dev'
-Requires-Dist: pytest; extra == 'dev'
-Requires-Dist: pytest-cov; extra == 'dev'
-Requires-Dist: pytest-xdist[psutil]~=3.5; extra == 'dev'
-Requires-Dist: ruff>=0.9.5; extra == 'dev'
-Requires-Dist: taskipy>=1.14.1; extra == 'dev'
-Requires-Dist: tomli>=2.2.1; extra == 'dev'
-Requires-Dist: types-jsonschema; extra == 'dev'
-Requires-Dist: types-setuptools; extra == 'dev'
-Provides-Extra: doc
-Requires-Dist: docutils; extra == 'doc'
-Requires-Dist: jinja2; extra == 'doc'
-Requires-Dist: myst-parser; extra == 'doc'
-Requires-Dist: numpydoc; extra == 'doc'
-Requires-Dist: pillow; extra == 'doc'
-Requires-Dist: pydata-sphinx-theme>=0.14.1; extra == 'doc'
-Requires-Dist: scipy; extra == 'doc'
-Requires-Dist: scipy-stubs; (python_version >= '3.10') and extra == 'doc'
-Requires-Dist: sphinx; extra == 'doc'
-Requires-Dist: sphinx-copybutton; extra == 'doc'
-Requires-Dist: sphinx-design; extra == 'doc'
-Requires-Dist: sphinxext-altair; extra == 'doc'
-Provides-Extra: save
-Requires-Dist: vl-convert-python>=1.8.0; extra == 'save'
-Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: typing_extensions>=4; python_version < "3.11"
+Provides-Extra: tests
+Requires-Dist: pytest; extra == "tests"
+Requires-Dist: pytest-asyncio; extra == "tests"
+Requires-Dist: mypy>=1.14.0; extra == "tests"
+Dynamic: license-file
 
-# Vega-Altair <a href="https://altair-viz.github.io/"><img align="right" src="https://altair-viz.github.io/_static/altair-logo-light.png" height="50"></img></a>
+asgiref
+=======
 
-[![github actions](https://github.com/vega/altair/workflows/build/badge.svg)](https://github.com/vega/altair/actions?query=workflow%3Abuild)
-[![typedlib_mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://www.mypy-lang.org)
-[![JOSS Paper](https://joss.theoj.org/papers/10.21105/joss.01057/status.svg)](https://joss.theoj.org/papers/10.21105/joss.01057)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/altair)](https://pypi.org/project/altair)
+.. image:: https://github.com/django/asgiref/actions/workflows/tests.yml/badge.svg
+    :target: https://github.com/django/asgiref/actions/workflows/tests.yml
 
-**Vega-Altair** is a declarative statistical visualization library for Python. With Vega-Altair, you can spend more time understanding your data and its meaning. Vega-Altair's
-API is simple, friendly and consistent and built on top of the powerful
-[Vega-Lite](https://github.com/vega/vega-lite) JSON specification. This elegant
-simplicity produces beautiful and effective visualizations with a minimal amount of code. 
+.. image:: https://img.shields.io/pypi/v/asgiref.svg
+    :target: https://pypi.python.org/pypi/asgiref
 
-*Vega-Altair was originally developed by [Jake Vanderplas](https://github.com/jakevdp) and [Brian
-Granger](https://github.com/ellisonbg) in close collaboration with the [UW
-Interactive Data Lab](https://idl.cs.washington.edu/).*
-*The Vega-Altair open source project is not affiliated with Altair Engineering, Inc.*
+ASGI is a standard for Python asynchronous web apps and servers to communicate
+with each other, and positioned as an asynchronous successor to WSGI. You can
+read more at https://asgi.readthedocs.io/en/latest/
 
-## Documentation
+This package includes ASGI base libraries, such as:
 
-See [Vega-Altair's Documentation Site](https://altair-viz.github.io) as well as the [Tutorial Notebooks](https://github.com/altair-viz/altair_notebooks). You can
-run the notebooks directly in your browser by clicking on one of the following badges:
+* Sync-to-async and async-to-sync function wrappers, ``asgiref.sync``
+* Server base classes, ``asgiref.server``
+* A WSGI-to-ASGI adapter, in ``asgiref.wsgi``
 
-[![Binder](https://beta.mybinder.org/badge.svg)](https://beta.mybinder.org/v2/gh/altair-viz/altair_notebooks/master)
-[![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/altair-viz/altair_notebooks/blob/master/notebooks/Index.ipynb)
 
-## Example
+Function wrappers
+-----------------
 
-Here is an example using Vega-Altair to quickly visualize and display a dataset with the native Vega-Lite renderer in the JupyterLab:
+These allow you to wrap or decorate async or sync functions to call them from
+the other style (so you can call async functions from a synchronous thread,
+or vice-versa).
 
-```python
-import altair as alt
+In particular:
 
-# load a simple dataset as a pandas DataFrame
-from altair.datasets import data
-cars = data.cars()
+* AsyncToSync lets a synchronous subthread stop and wait while the async
+  function is called on the main thread's event loop, and then control is
+  returned to the thread when the async function is finished.
 
-alt.Chart(cars).mark_point().encode(
-    x='Horsepower',
-    y='Miles_per_Gallon',
-    color='Origin',
-)
-```
+* SyncToAsync lets async code call a synchronous function, which is run in
+  a threadpool and control returned to the async coroutine when the synchronous
+  function completes.
 
-![Vega-Altair Visualization](https://raw.githubusercontent.com/altair-viz/altair/main/images/cars.png)
+The idea is to make it easier to call synchronous APIs from async code and
+asynchronous APIs from synchronous code so it's easier to transition code from
+one style to the other. In the case of Channels, we wrap the (synchronous)
+Django view system with SyncToAsync to allow it to run inside the (asynchronous)
+ASGI server.
 
-One of the unique features of Vega-Altair, inherited from Vega-Lite, is a declarative grammar of not just visualization, but _interaction_. 
-With a few modifications to the example above we can create a linked histogram that is filtered based on a selection of the scatter plot.
+Note that exactly what threads things run in is very specific, and aimed to
+keep maximum compatibility with old synchronous code. See
+"Synchronous code & Threads" below for a full explanation. By default,
+``sync_to_async`` will run all synchronous code in the program in the same
+thread for safety reasons; you can disable this for more performance with
+``@sync_to_async(thread_sensitive=False)``, but make sure that your code does
+not rely on anything bound to threads (like database connections) when you do.
 
-```python 
-import altair as alt
-from altair.datasets import data
 
-source = data.cars()
+Threadlocal replacement
+-----------------------
 
-brush = alt.selection_interval()
+This is a drop-in replacement for ``threading.local`` that works with both
+threads and asyncio Tasks. Even better, it will proxy values through from a
+task-local context to a thread-local context when you use ``sync_to_async``
+to run things in a threadpool, and vice-versa for ``async_to_sync``.
 
-points = alt.Chart(source).mark_point().encode(
-    x='Horsepower',
-    y='Miles_per_Gallon',
-    color=alt.when(brush).then("Origin").otherwise(alt.value("lightgray"))
-).add_params(
-    brush
-)
+If you instead want true thread- and task-safety, you can set
+``thread_critical`` on the Local object to ensure this instead.
 
-bars = alt.Chart(source).mark_bar().encode(
-    y='Origin',
-    color='Origin',
-    x='count(Origin)'
-).transform_filter(
-    brush
-)
 
-points & bars
-```
+Server base classes
+-------------------
 
-![Vega-Altair Visualization Gif](https://raw.githubusercontent.com/altair-viz/altair/main/images/cars_scatter_bar.gif)
+Includes a ``StatelessServer`` class which provides all the hard work of
+writing a stateless server (as in, does not handle direct incoming sockets
+but instead consumes external streams or sockets to work out what is happening).
 
-## Features
+An example of such a server would be a chatbot server that connects out to
+a central chat server and provides a "connection scope" per user chatting to
+it. There's only one actual connection, but the server has to separate things
+into several scopes for easier writing of the code.
 
-* Carefully-designed, declarative Python API.
-* Auto-generated internal Python API that guarantees visualizations are type-checked and
-  in full conformance with the [Vega-Lite](https://github.com/vega/vega-lite)
-  specification.
-* Display visualizations in JupyterLab, Jupyter Notebook, Visual Studio Code, on GitHub and
-  [nbviewer](https://nbviewer.jupyter.org/), and many more.
-* Export visualizations to various formats such as PNG/SVG images, stand-alone HTML pages and the
-[Online Vega-Lite Editor](https://vega.github.io/editor/#/).
-* Serialize visualizations as JSON files.
+You can see an example of this being used in `frequensgi <https://github.com/andrewgodwin/frequensgi>`_.
 
-## Installation
 
-Vega-Altair can be installed with:
-```bash
-pip install altair
-```
+WSGI-to-ASGI adapter
+--------------------
 
-If you are using the conda package manager, the equivalent is:
-```bash
-conda install altair -c conda-forge
-```
+Allows you to wrap a WSGI application so it appears as a valid ASGI application.
 
-For full installation instructions, please see [the documentation](https://altair-viz.github.io/getting_started/installation.html).
+Simply wrap it around your WSGI application like so::
 
-## Getting Help
+    asgi_application = WsgiToAsgi(wsgi_application)
 
-If you have a question that is not addressed in the documentation, 
-you can post it on [StackOverflow](https://stackoverflow.com/questions/tagged/altair) using the `altair` tag.
-For bugs and feature requests, please open a [Github Issue](https://github.com/vega/altair/issues).
+The WSGI application will be run in a synchronous threadpool, and the wrapped
+ASGI application will be one that accepts ``http`` class messages.
 
-## Development
-[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![pytest](https://img.shields.io/badge/logo-pytest-blue?logo=pytest&labelColor=5c5c5c&label=%20)](https://github.com/pytest-dev/pytest)
+Please note that not all extended features of WSGI may be supported (such as
+file handles for incoming POST bodies).
 
-For information on how to contribute your developments back to the Vega-Altair repository, see
-[`CONTRIBUTING.md`](https://github.com/vega/altair/blob/main/CONTRIBUTING.md)
 
-## Citing Vega-Altair
+Dependencies
+------------
 
-[![JOSS Paper](https://joss.theoj.org/papers/10.21105/joss.01057/status.svg)](https://joss.theoj.org/papers/10.21105/joss.01057)
+``asgiref`` requires Python 3.9 or higher.
 
-If you use Vega-Altair in academic work, please consider citing https://joss.theoj.org/papers/10.21105/joss.01057 as
 
-```bib
-@article{VanderPlas2018,
-    doi = {10.21105/joss.01057},
-    url = {https://doi.org/10.21105/joss.01057},
-    year = {2018},
-    publisher = {The Open Journal},
-    volume = {3},
-    number = {32},
-    pages = {1057},
-    author = {Jacob VanderPlas and Brian Granger and Jeffrey Heer and Dominik Moritz and Kanit Wongsuphasawat and Arvind Satyanarayan and Eitan Lees and Ilia Timofeev and Ben Welsh and Scott Sievert},
-    title = {Altair: Interactive Statistical Visualizations for Python},
-    journal = {Journal of Open Source Software}
-}
-```
-Please additionally consider citing the [Vega-Lite](https://vega.github.io/vega-lite/) project, which Vega-Altair is based on: https://dl.acm.org/doi/10.1109/TVCG.2016.2599030
+Contributing
+------------
 
-```bib
-@article{Satyanarayan2017,
-    author={Satyanarayan, Arvind and Moritz, Dominik and Wongsuphasawat, Kanit and Heer, Jeffrey},
-    title={Vega-Lite: A Grammar of Interactive Graphics},
-    journal={IEEE transactions on visualization and computer graphics},
-    year={2017},
-    volume={23},
-    number={1},
-    pages={341-350},
-    publisher={IEEE}
-} 
-```
+Please refer to the
+`main Channels contributing docs <https://github.com/django/channels/blob/master/CONTRIBUTING.rst>`_.
+
+
+Testing
+'''''''
+
+To run tests, make sure you have installed the ``tests`` extra with the package::
+
+    cd asgiref/
+    pip install -e .[tests]
+    pytest
+
+
+Building the documentation
+''''''''''''''''''''''''''
+
+The documentation uses `Sphinx <http://www.sphinx-doc.org>`_::
+
+    cd asgiref/docs/
+    pip install sphinx
+
+To build the docs, you can use the default tools::
+
+    sphinx-build -b html . _build/html  # or `make html`, if you've got make set up
+    cd _build/html
+    python -m http.server
+
+...or you can use ``sphinx-autobuild`` to run a server and rebuild/reload
+your documentation changes automatically::
+
+    pip install sphinx-autobuild
+    sphinx-autobuild . _build/html
+
+
+Releasing
+'''''''''
+
+To release, first add details to CHANGELOG.txt and update the version number in ``asgiref/__init__.py``.
+
+Then, build and push the packages::
+
+    python -m build
+    twine upload dist/*
+    rm -r asgiref.egg-info dist
+
+
+Implementation Details
+----------------------
+
+Synchronous code & threads
+''''''''''''''''''''''''''
+
+The ``asgiref.sync`` module provides two wrappers that let you go between
+asynchronous and synchronous code at will, while taking care of the rough edges
+for you.
+
+Unfortunately, the rough edges are numerous, and the code has to work especially
+hard to keep things in the same thread as much as possible. Notably, the
+restrictions we are working with are:
+
+* All synchronous code called through ``SyncToAsync`` and marked with
+  ``thread_sensitive`` should run in the same thread as each other (and if the
+  outer layer of the program is synchronous, the main thread)
+
+* If a thread already has a running async loop, ``AsyncToSync`` can't run things
+  on that loop if it's blocked on synchronous code that is above you in the
+  call stack.
+
+The first compromise you get to might be that ``thread_sensitive`` code should
+just run in the same thread and not spawn in a sub-thread, fulfilling the first
+restriction, but that immediately runs you into the second restriction.
+
+The only real solution is to essentially have a variant of ThreadPoolExecutor
+that executes any ``thread_sensitive`` code on the outermost synchronous
+thread - either the main thread, or a single spawned subthread.
+
+This means you now have two basic states:
+
+* If the outermost layer of your program is synchronous, then all async code
+  run through ``AsyncToSync`` will run in a per-call event loop in arbitrary
+  sub-threads, while all ``thread_sensitive`` code will run in the main thread.
+
+* If the outermost layer of your program is asynchronous, then all async code
+  runs on the main thread's event loop, and all ``thread_sensitive`` synchronous
+  code will run in a single shared sub-thread.
+
+Crucially, this means that in both cases there is a thread which is a shared
+resource that all ``thread_sensitive`` code must run on, and there is a chance
+that this thread is currently blocked on its own ``AsyncToSync`` call. Thus,
+``AsyncToSync`` needs to act as an executor for thread code while it's blocking.
+
+The ``CurrentThreadExecutor`` class provides this functionality; rather than
+simply waiting on a Future, you can call its ``run_until_future`` method and
+it will run submitted code until that Future is done. This means that code
+inside the call can then run code on your thread.
+
+
+Maintenance and Security
+------------------------
+
+To report security issues, please contact security@djangoproject.com. For GPG
+signatures and more security process information, see
+https://docs.djangoproject.com/en/dev/internals/security/.
+
+To report bugs or request new features, please open a new GitHub issue.
+
+This repository is part of the Channels project. For the shepherd and maintenance team, please see the
+`main Channels readme <https://github.com/django/channels/blob/master/README.rst>`_.
