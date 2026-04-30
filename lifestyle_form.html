@@ -313,6 +313,14 @@
 
         <h2>📋 Track Your Lifestyle</h2>
 
+        {% if form.non_field_errors %}
+            <div class="error-message">
+                {% for error in form.non_field_errors %}
+                    {{ error }}<br>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         {% if prediction_result %}
             <div class="prediction-result">
                 <h3>🎯 Your Lifestyle Prediction</h3>
@@ -353,24 +361,52 @@
             <div class="form-section">
                 <h3>Location</h3>
                 {{ form.address }}
+                {% if form.address.errors %}
+                    <div class="error-message">
+                        {% for error in form.address.errors %}
+                            {{ error }}<br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 <p class="helper-text">Enter your location or address so we can personalize your lifestyle record.</p>
             </div>
 
             <div class="form-section">
                 <h3>Sleep Hours</h3>
                 {{ form.sleep_hours }}
+                {% if form.sleep_hours.errors %}
+                    <div class="error-message">
+                        {% for error in form.sleep_hours.errors %}
+                            {{ error }}<br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 <p class="helper-text">Enter how many hours you sleep on average per day (e.g. 7.5).</p>
             </div>
 
             <div class="form-section">
                 <h3>Exercise Hours</h3>
                 {{ form.exercise_hours }}
+                {% if form.exercise_hours.errors %}
+                    <div class="error-message">
+                        {% for error in form.exercise_hours.errors %}
+                            {{ error }}<br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 <p class="helper-text">Enter your daily exercise time in hours (e.g. 1.0, 2.5).</p>
             </div>
 
             <div class="form-section">
                 <h3>Diet Quality</h3>
                 {{ form.diet_quality }}
+                {% if form.diet_quality.errors %}
+                    <div class="error-message">
+                        {% for error in form.diet_quality.errors %}
+                            {{ error }}<br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 <p class="helper-text">Choose your nutrition quality: Poor, Fair, Good, or Excellent.</p>
             </div>
 
