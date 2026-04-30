@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Life AI</title>
+    <link rel="stylesheet" href="/static/theme.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif; 
+            background: linear-gradient(135deg, #0F172A 0%, #064E3B 100%);
+            color: #F8FAFC;
+            min-height: 100vh; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            line-height: 1.6;
+        }
+        .container { 
+            width: 100%; 
+            max-width: 450px; 
+            background: rgba(15, 23, 42, 0.96); 
+            padding: 50px 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo-text {
+            font-size: 32px;
+            font-weight: 700;
+            background: var(--bg-gradient-3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        h2 { 
+            color: #F8FAFC; 
+            font-size: 28px; 
+            margin-bottom: 8px; 
+            text-align: center; 
+            font-weight: 700;
+        }
+        .subtitle { 
+            text-align: center; 
+            color: #CBD5E1; 
+            margin-bottom: 35px; 
+            font-size: 14px;
+            letter-spacing: 0.3px;
+        }
+        .form-group { margin-bottom: 22px; }
+        label { 
+            display: block; 
+            margin-bottom: 10px; 
+            color: #E2E8F0; 
+            font-weight: 700; 
+            font-size: 14px;
+        }
+        input { 
+            width: 100%; 
+            padding: 14px 16px; 
+            border: 1px solid #334155; 
+            border-radius: 12px; 
+            font-size: 15px; 
+            transition: all 0.3s ease; 
+            background: #0F172A; 
+            color: #E2E8F0;
+            font-family: inherit;
+            font-weight: 500;
+        }
+        input:hover {
+            border-color: #22C55E;
+        }
+        input:focus { 
+            outline: none; 
+            border-color: #22C55E; 
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18); 
+            background: #111827;
+        }
+        button { 
+            width: 100%; 
+            padding: 14px 24px; 
+            background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%); 
+            color: #F8FAFC; 
+            border: none; 
+            border-radius: 12px; 
+            font-size: 15px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            margin-top: 10px; 
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.28);
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
+        }
+        button:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 12px 24px rgba(34, 197, 94, 0.32);
+        }
+        button:active { transform: translateY(0); }
+        .signup-link { 
+            text-align: center; 
+            margin-top: 28px; 
+            color: #CBD5E1; 
+            font-size: 14px;
+        }
+        .signup-link a { 
+            color: #7DD3FC; 
+            text-decoration: none; 
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        .signup-link a:hover { 
+            color: #38BDF8;
+            transform: translateX(2px);
+        }
+        .error { 
+            color: #7F1D1D;
+            background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+            padding: 14px 16px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            border-left: 4px solid #DC2626;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .divider {
+            text-align: center;
+            margin: 28px 0;
+            color: var(--text-tertiary);
+            font-size: 14px;
+        }
+        @media (max-width: 480px) {
+            .container { padding: 35px 25px; }
+        }
+    </style>
+</head>
+<body class="registration-page">
+    <div class="container">
+        <div class="logo">
+            <div class="logo-text">🧬 Life AI</div>
+        </div>
+        
+        <h1>Create Account</h1>
+        <p class="subtitle">Join Life AI to start your lifestyle journey</p>
+        
+        {% if error %}
+            <div class="error">⚠️ {{ error }}</div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username">👤 Username</label>
+                <input id="id_username" name="username" type="text" placeholder="Enter your username" value="{{ request.POST.username|default_if_none:'' }}" autocomplete="username" />
+            </div>
+            
+            <div class="form-group">
+                <label for="id_email">📧 Email Address</label>
+                <input id="id_email" name="email" type="email" placeholder="Enter your email address" value="{{ request.POST.email|default_if_none:'' }}" autocomplete="email" />
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password1">🔐 Password</label>
+                <input id="id_password1" name="password" type="password" placeholder="Create a strong password" autocomplete="new-password" />
+                <div class="password-requirements">
+                    ℹ️ Password must be at least 8 characters long
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password2">✅ Confirm Password</label>
+                <input id="id_password2" name="password_confirm" type="password" placeholder="Confirm your password" autocomplete="new-password" />
+            </div>
+            
+            <button type="submit">🚀 Create Account</button>
+        </form>
+        
+        <div class="link">
+            Already have an account? <a href="{% url 'login' %}">Sign in here</a>
+        </div>
+    </div>
+</body>
+</html>

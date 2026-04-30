@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Life AI</title>
+    <link rel="stylesheet" href="/static/theme.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif; 
+            background: linear-gradient(135deg, #0F172A 0%, #064E3B 100%);
+            color: #F8FAFC;
+            min-height: 100vh; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            line-height: 1.6;
+        }
+        .container { 
+            width: 100%; 
+            max-width: 450px; 
+            background: rgba(15, 23, 42, 0.96); 
+            padding: 50px 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo-text {
+            font-size: 32px;
+            font-weight: 700;
+            background: var(--bg-gradient-3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        h2 { 
+            color: #F8FAFC; 
+            font-size: 28px; 
+            margin-bottom: 8px; 
+            text-align: center; 
+            font-weight: 700;
+        }
+        .subtitle { 
+            text-align: center; 
+            color: #CBD5E1; 
+            margin-bottom: 35px; 
+            font-size: 14px;
+            letter-spacing: 0.3px;
+        }
+        .form-group { margin-bottom: 22px; }
+        label { 
+            display: block; 
+            margin-bottom: 10px; 
+            color: #E2E8F0; 
+            font-weight: 700; 
+            font-size: 14px;
+        }
+        input { 
+            width: 100%; 
+            padding: 14px 16px; 
+            border: 1px solid #334155; 
+            border-radius: 12px; 
+            font-size: 15px; 
+            transition: all 0.3s ease; 
+            background: #0F172A; 
+            color: #E2E8F0;
+            font-family: inherit;
+            font-weight: 500;
+        }
+        input:hover {
+            border-color: #22C55E;
+        }
+        input:focus { 
+            outline: none; 
+            border-color: #22C55E; 
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18); 
+            background: #111827;
+        }
+        button { 
+            width: 100%; 
+            padding: 14px 24px; 
+            background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%); 
+            color: #F8FAFC; 
+            border: none; 
+            border-radius: 12px; 
+            font-size: 15px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            margin-top: 10px; 
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.28);
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
+        }
+        button:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 12px 24px rgba(34, 197, 94, 0.32);
+        }
+        button:active { transform: translateY(0); }
+        .signup-link { 
+            text-align: center; 
+            margin-top: 28px; 
+            color: #CBD5E1; 
+            font-size: 14px;
+        }
+        .signup-link a { 
+            color: #7DD3FC; 
+            text-decoration: none; 
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        .signup-link a:hover { 
+            color: #38BDF8;
+            transform: translateX(2px);
+        }
+        .error { 
+            color: #7F1D1D;
+            background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+            padding: 14px 16px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            border-left: 4px solid #DC2626;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .divider {
+            text-align: center;
+            margin: 28px 0;
+            color: var(--text-tertiary);
+            font-size: 14px;
+        }
+        @media (max-width: 480px) {
+            .container { padding: 35px 25px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-text">🧬 Life AI</div>
+        </div>
+        
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Sign in to your account</p>
+
+        {% if error %}
+            <div class="error">⚠️ {{ error }}</div>
+        {% endif %}
+
+        {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+                <div class="error">⚠️ {{ error }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username">👤 Username</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="error">{{ form.username.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_password">🔐 Password</label>
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <div class="error">{{ form.password.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit">✨ Sign In</button>
+        </form>
+
+        <div class="signup-link">
+            Don't have an account? <a href="{% url 'register' %}">Create one now</a>
+        </div>
+    </div>
+</body>
+</html>
